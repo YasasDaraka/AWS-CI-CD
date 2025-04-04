@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', 'Arial', sans-serif;
-            overflow: hidden;
         }
 
         body {
@@ -18,14 +17,14 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, rgba(106, 17, 203, 0.5), rgba(37, 117, 252, 0.5));
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), linear-gradient(135deg, rgba(106, 17, 203, 0.6), rgba(37, 117, 252, 0.6));
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
-            width: 50%;
-            height: auto;
-            max-width: 50%;
+            width: 100%;
+            max-width: 32%;
             background: white;
             padding: 30px;
             border-radius: 16px;
@@ -33,26 +32,8 @@
             text-align: center;
             animation: fadeIn 0.8s ease-in-out;
             overflow-y: auto;
-            max-height: 90vh;
-            overflow: hidden;
-        }
-        #main-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 60%;
-            height: auto;
-            max-width: 60%;
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            animation: fadeIn 0.8s ease-in-out;
-            overflow-y: auto;
-            max-height: 90vh;
-            overflow: hidden;
-        }
+            }
+
         h2 {
             margin-bottom: 25px;
             color: #333;
@@ -62,17 +43,6 @@
             padding-bottom: 10px;
         }
 
-        h2:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 3px;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            border-radius: 3px;
-        }
 
         .form-group {
             text-align: left;
@@ -107,75 +77,107 @@
             background-color: #fff;
         }
 
-         button {
+        button {
             width: 100%;
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background: #2575fc;
+            background: #134393;
             color: white;
             font-size: 18px;
             cursor: pointer;
             transition: 0.3s;
         }
+
         button:hover {
             background: #6a11cb;
         }
 
-        .result {
-            width: 45%;
-            height: 20%;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-            background: #f5f7ff;
-            text-align: left;
-            border-bottom: 4px solid #2575fc;
-            border-top: 4px solid #2575fc;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .result h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            text-align: left;
-        }
-
-        .result h2:after {
+        .popup-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
-            transform: none;
-            width: 50px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
 
-        pre {
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup {
+            width: 90%;
+            max-width: 450px;
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.active .popup {
+            transform: scale(1);
+        }
+
+        .close-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .close-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .close-icon:before, .close-icon:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #6a11cb;
+        }
+
+        .close-icon:before {
+            transform: rotate(45deg);
+        }
+
+        .close-icon:after {
+            transform: rotate(-45deg);
+        }
+
+        .result-content {
+            margin-top: 10px;
+            padding: 15px;
+            background: #f5f7ff;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .result-content pre {
             white-space: pre-wrap;
             word-wrap: break-word;
             font-family: 'Consolas', monospace;
             font-size: 14px;
             line-height: 1.5;
-            color: #333;
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #e0e0e0;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-group.floating {
-            position: relative;
-        }
-
 
         select {
             width: 100%;
@@ -201,11 +203,22 @@
             background-color: #fff;
         }
 
-        .form-group label{
+        .form-group.floating label {
             top: 10px;
             left: 16px;
             font-size: 12px;
             color: #6a11cb;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 480px) {
@@ -217,159 +230,172 @@
 </head>
 <body>
 
-<div class="" id="main-container">
-    <div class="container" id="customerForm">
-        <h2>Customer Information</h2>
+<div class="container">
+    <h2>Customer Form</h2>
 
-        <form id="userDataForm">
-            <div class="form-group">
-                <label for="age">Age</label>
-                <input type="text" id="age" name="age" value="50">
-            </div>
-
-            <div class="form-group">
-                <label for="job">Job</label>
-                <select id="job" name="job">
-                    <option value="student" selected>Student</option>
-                    <option value="housemaid">Housemaid</option>
-                    <option value="services">Services</option>
-                    <option value="admin.">Admin</option>
-                    <option value="blue-collar">Blue-collar</option>
-                    <option value="technician">Technician</option>
-                    <option value="retired">Retired</option>
-                    <option value="management">Management</option>
-                    <option value="unemployed">Unemployed</option>
-                    <option value="self-employed">Self-employed</option>
-                    <option value="unknown">Unknown</option>
-                    <option value="entrepreneur">Entrepreneur</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="marital">Marital Status</label>
-                <select id="marital" name="marital">
-                    <option value="married">Married</option>
-                    <option value="single">Single</option>
-                    <option value="divorced">Divorced</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="education">Education</label>
-                <select id="education" name="education">
-                    <option value="basic.4y" selected>Basic.4y</option>
-                    <option value="high.school">High School</option>
-                    <option value="basic.6y">Basic.6y</option>
-                    <option value="basic.9y">Basic.9y</option>
-                    <option value="professional.course">Professional Course</option>
-                    <option value="university.degree">University Degree</option>
-                    <option value="illiterate">Illiterate</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="default">Default</label>
-                <select id="default" name="default">
-                    <option value="yes" selected>Yes</option>
-                    <option value="no">No</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="housing">Housing</label>
-                <select id="housing" name="housing">
-                    <option value="yes" selected>Yes</option>
-                    <option value="no">No</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="loan">Loan</label>
-                <select id="loan" name="loan">
-                    <option value="yes" selected>Yes</option>
-                    <option value="no">No</option>
-                </select>
-            </div>
-
-            <button type="button" id="submitBtn" onclick="sendAjaxRequest()">Submit</button>
-            </form>
+    <form id="userDataForm">
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="text" id="age" name="age" value="50">
         </div>
 
-        <div class="result" id="resultContainer">
-            <h2>Result</h2>
-            <pre id="responseData"></pre>
+        <div class="form-group">
+            <label for="job">Job</label>
+            <select id="job" name="job">
+                <option value="student" selected>Student</option>
+                <option value="housemaid">Housemaid</option>
+                <option value="services">Services</option>
+                <option value="admin.">Admin</option>
+                <option value="blue-collar">Blue-collar</option>
+                <option value="technician">Technician</option>
+                <option value="retired">Retired</option>
+                <option value="management">Management</option>
+                <option value="unemployed">Unemployed</option>
+                <option value="self-employed">Self-employed</option>
+                <option value="unknown">Unknown</option>
+                <option value="entrepreneur">Entrepreneur</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="marital">Marital Status</label>
+            <select id="marital" name="marital">
+                <option value="married">Married</option>
+                <option value="single">Single</option>
+                <option value="divorced">Divorced</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="education">Education</label>
+            <select id="education" name="education">
+                <option value="basic.4y" selected>Basic.4y</option>
+                <option value="high.school">High School</option>
+                <option value="basic.6y">Basic.6y</option>
+                <option value="basic.9y">Basic.9y</option>
+                <option value="professional.course">Professional Course</option>
+                <option value="university.degree">University Degree</option>
+                <option value="illiterate">Illiterate</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="default">Default</label>
+            <select id="default" name="default">
+                <option value="yes" selected>Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="housing">Housing</label>
+            <select id="housing" name="housing">
+                <option value="yes" selected>Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="loan">Loan</label>
+            <select id="loan" name="loan">
+                <option value="yes" selected>Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <button type="button" id="submitBtn" onclick="sendAjaxRequest()">Submit</button>
+    </form>
+</div>
+
+<div class="popup-overlay" id="resultPopup">
+    <div class="popup">
+        <div class="close-icon" id="closePopup"></div>
+        <h2 style="text-align: center">Result</h2>
+        <div class="result-content">
+            <h3 id="responseData" style="font-family: 'Consolas', monospace"></h3>
         </div>
     </div>
-    <script>
+</div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input');
 
-            inputs.forEach(input => {
-                const parent = input.parentElement;
-                parent.classList.add('floating');
+        inputs.forEach(input => {
+            const parent = input.parentElement;
+            parent.classList.add('floating');
+
+            input.setAttribute('placeholder', ' ');
 
 
-                input.setAttribute('placeholder', ' ');
-
-                // Check if input has value on load and adjust label
-                if (input.value) {
-                    const label = parent.querySelector('label');
-                    if (label) {
-                        label.style.top = '10px';
-                        label.style.fontSize = '12px';
-                        label.style.color = '#6a11cb';
-                    }
+            if (input.value) {
+                const label = parent.querySelector('label');
+                if (label) {
+                    label.style.top = '10px';
+                    label.style.fontSize = '12px';
+                    label.style.color = '#6a11cb';
                 }
-            });
+            }
         });
 
-        function sendAjaxRequest() {
-            // Show loading indication on button
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Processing...';
-            submitBtn.disabled = true;
 
-            const userData = {
-                "age": document.getElementById('age').value,
-                "job": document.getElementById('job').value,
-                "marital": document.getElementById('marital').value,
-                "education": document.getElementById('education').value,
-                "default": document.getElementById('default').value,
-                "housing": document.getElementById('housing').value,
-                "loan": document.getElementById('loan').value
-            };
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('resultPopup').classList.remove('active');
+        });
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://ai-lb-1245715781.ap-south-1.elb.amazonaws.com/predict', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    // Reset button state
-                    submitBtn.innerText = originalText;
-                    submitBtn.disabled = false;
+        document.getElementById('resultPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    });
 
-                    const resultContainer = document.getElementById('resultContainer');
-                    resultContainer.style.display = 'block';
+    function sendAjaxRequest() {
+        // Show loading indication on button
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = 'Processing...';
+        submitBtn.disabled = true;
 
-                    if (xhr.status === 200) {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            document.getElementById('responseData').textContent = "Predicted Subscription: "+response.result
+        const userData = {
+            "age": document.getElementById('age').value,
+            "job": document.getElementById('job').value,
+            "marital": document.getElementById('marital').value,
+            "education": document.getElementById('education').value,
+            "default": document.getElementById('default').value,
+            "housing": document.getElementById('housing').value,
+            "loan": document.getElementById('loan').value
+        };
 
-                        } catch (e) {
-                            document.getElementById('responseData').textContent = xhr.responseText;
-                        }
-                    } else {
-                        document.getElementById('responseData').textContent = `Error ${xhr.status}: ${xhr.statusText}\n\n${xhr.responseText}`;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http:/ai-lb-1803325148.ap-south-1.elb.amazonaws.com/predict', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                // Reset button state
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+
+
+                document.getElementById('resultPopup').classList.add('active');
+
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        document.getElementById('responseData').textContent = "Predicted Subscription: " + response.result;
+                    } catch (e) {
+                        document.getElementById('responseData').textContent = xhr.responseText;
                     }
+                } else {
+                    document.getElementById('responseData').textContent = `Error ${xhr.status}: ${xhr.statusText}\n\n${xhr.responseText}`;
                 }
-            };
+            }
+        };
 
-            xhr.send(JSON.stringify(userData));
-        }
-    </script>
+        xhr.send(JSON.stringify(userData));
+    }
+</script>
 </body>
 </html>
